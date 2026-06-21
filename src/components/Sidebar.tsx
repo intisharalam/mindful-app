@@ -12,6 +12,8 @@ const navItems = [
 const secondaryItems = [
   { href: "/library", label: "Library", icon: LibraryIcon, badge: "new" },
   { href: "/games", label: "Games", icon: GamesIcon, badge: "new" },
+  { href: "/history", label: "History", icon: HistoryIcon, badge: "new" },
+  { href: "/playlists", label: "Playlists", icon: PlaylistsIcon, badge: "new" },
 ];
 
 const settingsItem = { href: "/settings", label: "Settings", icon: SettingsIcon };
@@ -155,6 +157,34 @@ function GamesIcon({ active }: { active: boolean }) {
       <rect x="2" y="7" width="20" height="11" rx="5" stroke={active ? "#2E5339" : "#606060"} strokeWidth="2" />
       <circle cx="8" cy="12.5" r="1.4" fill={active ? "#2E5339" : "#606060"} />
       <circle cx="16" cy="12.5" r="1.4" fill={active ? "#2E5339" : "#606060"} />
+    </svg>
+  );
+}
+
+function HistoryIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="9" stroke={active ? "#2E5339" : "#606060"} strokeWidth="2" />
+      <path
+        d="M12 7v5l3.5 3.5"
+        stroke={active ? "#2E5339" : "#606060"}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function PlaylistsIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M4 6h10M4 12h10M4 18h6M17 14v6M14 17h6"
+        stroke={active ? "#2E5339" : "#606060"}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

@@ -74,4 +74,39 @@ async function createSchema(): Promise<void> {
       PRIMARY KEY (user_id, channel_id)
     );
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS history (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      content_type TEXT NOT NULL CHECK (content_type IN ('video', 'book')),
+      content_id INTEGER NOT NULL,
+      viewed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS history_user_viewed_idx
+    ON history (user_id, viewed_at DESC);
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS playlists (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      content_type TEXT NOT NULL CHECK (content_type IN ('video', 'book')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS playlist_items (
+      id SERIAL PRIMARY KEY,
+      playlist_id INTEGER NOT NULL REFERENCES playlists(id) ON DELETE CASCADE,
+      content_id INTEGER NOT NULL,
+      position INTEGER NOT NULL DEFAULT 0,
+      added_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      UNIQUE (playlist_id, content_id)
+    );
+  `;
 }

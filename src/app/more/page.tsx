@@ -6,6 +6,8 @@ import { useAppSettings } from "@/context/AppSettingsContext";
 
 const LINKS = [
   { href: "/analytics", label: "Analytics", icon: AnalyticsIcon, desc: "Streak, level, and time tracking" },
+  { href: "/history", label: "History", icon: HistoryIcon, desc: "Your 3 most recently viewed items" },
+  { href: "/playlists", label: "Playlists", icon: PlaylistsIcon, desc: "Your video and book collections" },
   { href: "/subscriptions", label: "Subscriptions", icon: SubsIcon, desc: "Creators you follow" },
   { href: "/settings", label: "Settings", icon: SettingsIcon, desc: "Categories, PIN, parent controls" },
 ];
@@ -115,6 +117,28 @@ function SettingsIcon() {
         stroke="#2E5339"
         strokeWidth="1.6"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function HistoryIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0">
+      <circle cx="12" cy="12" r="9" stroke="#2E5339" strokeWidth="2" />
+      <path d="M12 7v5l3.5 3.5" stroke="#2E5339" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function PlaylistsIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0">
+      <path
+        d="M4 6h10M4 12h10M4 18h6M17 14v6M14 17h6"
+        stroke="#2E5339"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );

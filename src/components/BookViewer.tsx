@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { Book } from "@/lib/types";
+import { logHistoryView } from "@/lib/logHistory";
+import AddToPlaylistMenu from "@/components/AddToPlaylistMenu";
 
 export default function BookViewer({
   book,
@@ -16,6 +18,7 @@ export default function BookViewer({
 
   useEffect(() => {
     openedAtRef.current = Date.now();
+    logHistoryView("book", book.id);
   }, [book]);
 
   const handleStart = () => {
@@ -62,12 +65,15 @@ export default function BookViewer({
           {book.blurb}
         </p>
 
-        <button
-          onClick={handleStart}
-          className="text-[14px] font-medium rounded-full px-5 py-2.5 bg-deep text-white hover:opacity-90"
-        >
-          Start reading · +1 streak
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={handleStart}
+            className="text-[14px] font-medium rounded-full px-5 py-2.5 bg-deep text-white hover:opacity-90"
+          >
+            Start reading · +1 streak
+          </button>
+          <AddToPlaylistMenu contentType="book" contentId={book.id} />
+        </div>
       </div>
     </div>
   );

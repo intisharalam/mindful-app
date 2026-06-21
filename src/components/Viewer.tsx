@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ContentItem } from "@/lib/types";
+import { logHistoryView } from "@/lib/logHistory";
+import AddToPlaylistMenu from "@/components/AddToPlaylistMenu";
 
 const WAIT_SECONDS = 3;
 
@@ -58,6 +60,7 @@ export default function Viewer({
 
   useEffect(() => {
     openedAtRef.current = Date.now();
+    logHistoryView("video", item.id);
   }, [item]);
 
   useEffect(() => {
@@ -163,6 +166,7 @@ export default function Viewer({
               {!canSkip && <Ring progress={1 - remaining / WAIT_SECONDS} />}
             </>
           )}
+          <AddToPlaylistMenu contentType="video" contentId={item.id} />
         </div>
       </div>
     </div>

@@ -2,13 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-// import { useEngagement } from "@/context/EngagementContext";
 import { useAppSettings } from "@/context/AppSettingsContext";
 import { useAuth } from "@/context/AuthContext";
 import PinModal from "@/components/PinModal";
 
 export default function TopBar() {
-  // const { streak, level, xp, xpPerLevel } = useEngagement();
   const { mode, switchToKid, requestSwitchToParent } = useAppSettings();
   const { user } = useAuth();
   const [showPin, setShowPin] = useState(false);
@@ -70,22 +68,6 @@ export default function TopBar() {
           {mode === "kid" ? "Kid mode" : "Parent mode"}
         </button>
 
-        {/* <div className="hidden sm:flex items-center gap-2 border border-border rounded-full pl-1 pr-3 py-1">
-          <div className="w-[22px] h-[22px] rounded-full bg-deep text-white flex items-center justify-center text-[11px] font-bold">
-            {level}
-          </div>
-          <span className="text-[12px] font-medium text-ink">
-            level {level}
-            <span className="text-ink-tertiary font-normal">
-              {" "}
-              · {xp}/{xpPerLevel} xp
-            </span>
-          </span>
-        </div> */}
-        {/* <div className="hidden sm:flex items-center gap-1.5 border border-border rounded-full px-3 py-1">
-          <span className="text-[13px]">🔥</span>
-          <span className="text-[12px] font-bold text-ink">{streak}</span>
-        </div> */}
         <Link
           href="/more"
           className="w-7 h-7 rounded-full bg-deep text-white flex items-center justify-center text-[12px] font-bold"
