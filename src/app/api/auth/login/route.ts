@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const user = findUserByEmail(email);
+  const user = await findUserByEmail(email);
   if (!user) {
     return NextResponse.json({ error: "Incorrect email or password" }, { status: 401 });
   }
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Incorrect email or password" }, { status: 401 });
   }
 
-  const token = createSession(user.id);
+  const token = await createSession(user.id);
 
   const res = NextResponse.json({
     user: { id: user.id, email: user.email, displayName: user.display_name },

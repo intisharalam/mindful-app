@@ -12,16 +12,16 @@ function defaultBudgets() {
 }
 
 export async function GET(req: NextRequest) {
-  const user = getCurrentUser(req);
+  const user = await getCurrentUser(req);
   if (!user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-  const settings = getUserSettings(user.id, defaultBudgets(), CATEGORIES);
+  const settings = await getUserSettings(user.id, defaultBudgets(), CATEGORIES);
   return NextResponse.json({ settings });
 }
 
 export async function PATCH(req: NextRequest) {
-  const user = getCurrentUser(req);
+  const user = await getCurrentUser(req);
   if (!user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
@@ -33,7 +33,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const current = getUserSettings(user.id, defaultBudgets(), CATEGORIES);
+  const current = await getUserSettings(user.id, defaultBudgets(), CATEGORIES);
 
   let mode = current.mode;
   if (body.requestedMode === "kid") {
@@ -54,6 +54,6 @@ export async function PATCH(req: NextRequest) {
       body.kidAllowedMicroCategories ?? current.kidAllowedMicroCategories,
   };
 
-  saveUserSettings(user.id, next);
+  await saveUserSettings(user.id, next);
   return NextResponse.json({ settings: next });
 }

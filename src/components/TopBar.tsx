@@ -24,7 +24,8 @@ export default function TopBar() {
   return (
     <header className="flex items-center gap-4 px-4 md:px-6 h-14 border-b border-border-soft bg-surface sticky top-0 z-30">
       <div className="flex items-center gap-1.5 text-[18px] font-bold text-ink">
-        INTENT
+        Mindful
+        <span className="text-deep">.</span>
       </div>
 
       <div className="flex-1 max-w-[420px] mx-auto hidden sm:flex items-center border border-border rounded-full px-4 py-1.5">

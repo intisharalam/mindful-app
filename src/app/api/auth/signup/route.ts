@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Display name is required" }, { status: 400 });
   }
 
-  const existing = findUserByEmail(email);
+  const existing = await findUserByEmail(email);
   if (existing) {
     return NextResponse.json(
       { error: "An account with this email already exists" },
@@ -36,8 +36,8 @@ export async function POST(req: NextRequest) {
   }
 
   const passwordHash = await hashPassword(password);
-  const userId = createUser(email, passwordHash, displayName.trim());
-  const token = createSession(userId);
+  const userId = await createUser(email, passwordHash, displayName.trim());
+  const token = await createSession(userId);
 
   const res = NextResponse.json({
     user: { id: userId, email: email.toLowerCase().trim(), displayName: displayName.trim() },

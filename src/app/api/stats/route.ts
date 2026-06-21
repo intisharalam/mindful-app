@@ -3,16 +3,16 @@ import { getCurrentUser } from "@/lib/server/requestAuth";
 import { getUserStats, saveUserStats, UserStats } from "@/lib/server/stats";
 
 export async function GET(req: NextRequest) {
-  const user = getCurrentUser(req);
+  const user = await getCurrentUser(req);
   if (!user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-  const stats = getUserStats(user.id);
+  const stats = await getUserStats(user.id);
   return NextResponse.json({ stats });
 }
 
 export async function PATCH(req: NextRequest) {
-  const user = getCurrentUser(req);
+  const user = await getCurrentUser(req);
   if (!user) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
@@ -24,7 +24,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const current = getUserStats(user.id);
+  const current = await getUserStats(user.id);
   const next: UserStats = {
     streak: body.streak ?? current.streak,
     level: body.level ?? current.level,
@@ -35,6 +35,6 @@ export async function PATCH(req: NextRequest) {
     shortsBlocked: body.shortsBlocked ?? current.shortsBlocked,
   };
 
-  saveUserStats(user.id, next);
+  await saveUserStats(user.id, next);
   return NextResponse.json({ stats: next });
 }

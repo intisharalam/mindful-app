@@ -1,4 +1,4 @@
-import { getDb } from "./db";
+import { sql, ensureSchema } from "./db";
 import { AppMode, CategoryBudget } from "@/lib/types";
 
 export interface UserSettings {
@@ -12,29 +12,33 @@ export interface UserSettings {
 interface SettingsRow {
   mode: string;
   pin: string;
-  short_form_enabled: number;
+  short_form_enabled: boolean;
   category_budgets: string;
   kid_allowed_micro_categories: string;
 }
 
-export function getUserSettings(
+export async function getUserSettings(
   userId: number,
   defaultBudgets: CategoryBudget[],
   defaultMicroCategories: string[]
-): UserSettings {
-  const db = getDb();
-  const row = db
-    .prepare(
-      `SELECT mode, pin, short_form_enabled, category_budgets, kid_allowed_micro_categories
-       FROM user_settings WHERE user_id = ?`
-    )
-    .get(userId) as SettingsRow | undefined;
+): Promise<UserSettings> {
+  await ensureSchema();
+
+  const rows = await sql`
+    SELECT mode, pin, short_form_enabled, category_budgets, kid_allowed_micro_categories
+    FROM user_settings WHERE user_id = ${userId}
+  `;
+  const row = rows[0] as SettingsRow | undefined;
 
   if (!row) {
-    db.prepare(
-      `INSERT INTO user_settings (user_id, category_budgets, kid_allowed_micro_categories)
-       VALUES (?, ?, ?)`
-    ).run(userId, JSON.stringify(defaultBudgets), JSON.stringify(defaultMicroCategories));
+    await sql`
+      INSERT INTO user_settings (user_id, category_budgets, kid_allowed_micro_categories)
+      VALUES (
+        ${userId},
+        ${JSON.stringify(defaultBudgets)},
+        ${JSON.stringify(defaultMicroCategories)}
+      )
+    `;
     return {
       mode: "parent",
       pin: "1234",
@@ -72,20 +76,20 @@ export function getUserSettings(
   };
 }
 
-export function saveUserSettings(userId: number, settings: UserSettings): void {
-  const db = getDb();
-  db.prepare(
-    `UPDATE user_settings SET
-       mode = ?, pin = ?, short_form_enabled = ?,
-       category_budgets = ?, kid_allowed_micro_categories = ?,
-       updated_at = datetime('now')
-     WHERE user_id = ?`
-  ).run(
-    settings.mode,
-    settings.pin,
-    settings.shortFormEnabled ? 1 : 0,
-    JSON.stringify(settings.categoryBudgets),
-    JSON.stringify(settings.kidAllowedMicroCategories),
-    userId
-  );
+export async function saveUserSettings(
+  userId: number,
+  settings: UserSettings
+): Promise<void> {
+  await ensureSchema();
+
+  await sql`
+    UPDATE user_settings SET
+      mode = ${settings.mode},
+      pin = ${settings.pin},
+      short_form_enabled = ${settings.shortFormEnabled},
+      category_budgets = ${JSON.stringify(settings.categoryBudgets)},
+      kid_allowed_micro_categories = ${JSON.stringify(settings.kidAllowedMicroCategories)},
+      updated_at = now()
+    WHERE user_id = ${userId}
+  `;
 }

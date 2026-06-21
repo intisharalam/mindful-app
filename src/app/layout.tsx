@@ -9,7 +9,7 @@ import BottomNav from "@/components/BottomNav";
 import { getCurrentUserFromCookies } from "@/lib/server/serverAuth";
 
 export const metadata: Metadata = {
-  title: "Intent — Intentional Media",
+  title: "Mindful — Intentional Media",
   description: "A media feed that rewards depth and slows down shallow content.",
 };
 
